@@ -1,63 +1,118 @@
-# Project Name
+# Rust Backend File Share with End-to-End Encryption
 
-This project is built using **Rust** and **SQLx** for database interactions. Below you'll find instructions on how to set up and manage the database, along with some key information about the tools used.
+[![Watch the video](https://img.youtube.com/vi/t5w2dauFmhM/maxresdefault.jpg)](https://youtu.be/t5w2dauFmhM)
+
+This project implements a file sharing backend using Rust, featuring end-to-end encryption to ensure the privacy and security of shared files.
+
+## Table of Contents
+
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Getting Started](#getting-started)
+- [API Endpoints](#api-endpoints)
+- [License](#license)
+- [Donations](#donations)
+
+## Technologies Used
+
+   - **Rust**: The primary programming language for the backend.
+   - **Axum**: A lightweight and ergonomic web framework for building APIs in Rust.
+   - **SQLx**: An asynchronous, compile-time verified SQL crate supporting multiple databases (in this case, PostgreSQL).
+   - **Argon2**: A secure password hashing library.
+   - **jsonwebtoken**: A library for encoding and decoding JSON Web Tokens (JWT) for authentication.
+   - **dotenv**: For managing environment variables in development.
+   - **Tokio**: An asynchronous runtime for Rust, powering the non-blocking operations.
+   - **Axum-Extra**: Additional utilities for Axum, including cookie support.
+   - **Tokio-Cron-Scheduler**: A scheduler library for running tasks periodically based on cron-like expressions.
+   - **Tower & Tower-HTTP**: Middleware and utilities for building robust HTTP services, including CORS and tracing support.
+   - **Serde & Serde JSON**: A framework for serializing and deserializing Rust data structures efficiently, used with JSON data.
+   - **Validator**: A validation framework for input validation in Rust.
+   - **Chrono**: A date and time library, used with `serde` for working with time formats.
+   - **UUID**: A library for generating and parsing universally unique identifiers (UUIDs).
+   - **Tracing Subscriber**: A logging library for Rust applications, providing structured logging.
+   - **AES & Block Modes**: Libraries for Advanced Encryption Standard (AES) encryption.
+   - **RSA**: A library for RSA encryption and decryption.
+   - **Rand**: A library for generating random values, used in cryptography and token generation.
+   - **Base64**: A library for encoding and decoding Base64, often used in file and cryptographic operations.
+
+## Technologies Used
+
+- **Rust**: The primary programming language for the backend.
+- **Actix Web**: A powerful, pragmatic, and extremely fast web framework for Rust.
+- **SQLx**: An asynchronous, compile-time verified SQL crate.
+- **Argon2**: Password hashing library for secure user authentication.
+- **jsonwebtoken**: Library for encoding and decoding JWT tokens.
+- **dotenv**: To manage environment variables.
 
 ## Getting Started
 
-To get started with this project, follow the steps below to set up your environment and database.
+To get a local copy of this project up and running, follow these steps:
 
 ### Prerequisites
 
-- **Rust**: Ensure that you have Rust installed on your machine. You can install Rust using [rustup](https://rustup.rs/).
-  
-  ```bash
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-SQLx: This project uses SQLx for asynchronous database access in Rust. Make sure to have it installed by adding it to your Cargo.toml with the required features.
+- Rust (1.58 or newer) installed. You can install Rust using [rustup](https://rustup.rs/).
+- PostgreSQL installed and running. Ensure you have a database created for this project.
 
-toml
-Copy code
-[dependencies]
-sqlx = { version = "0.5", features = ["postgres", "runtime-tokio-native-tls"] }
-PostgreSQL: Make sure PostgreSQL is installed and running on your machine.
+### Installation
 
-Running the Project
-Install dependencies
+1. Clone the repository:
 
-Run the following command to install all dependencies required for the project:
+   ```
+   git clone https://github.com/AarambhDevHub/file-share-rust-backend.git
+   cd file-share-rust-backend
+   ```
+2. Create a .env file in the root of the project with the following variables:
 
-bash
-Copy code
-$ ./deps.sh
-Set up the database
+    ```
+    # -----------------------------------------------------------------------------
+    # Database (PostgreSQL)
+    # -----------------------------------------------------------------------------
+    DATABASE_URL=postgresql://username:password@localhost:5432/file_share_tutorial 
 
-To initialize the database, use the following commands:
+    # -----------------------------------------------------------------------------
+    # JSON Web Token Credentials
+    # -----------------------------------------------------------------------------
+    JWT_SECRET_KEY=my_ultra_secure_jwt_secret_key
+    JWT_MAXAGE=60
+    ```
 
-Add migration files for database tables:
+3. Install the necessary dependencies:
 
-bash
-Copy code
-$ sqlx migrate add tables
-Create the database:
+    ```
+    cargo build
+    ```
 
-bash
-Copy code
-$ sqlx database create
-Run the migrations:
+4. Run database migrations:
 
-bash
-Copy code
-$ sqlx migrate run
-Rust Overview
-Rust is a systems programming language focused on speed, memory safety, and concurrency. Here are a few key features of Rust that are leveraged in this project:
+    ```
+    sqlx migrate run
+    ```
 
-Memory Safety: Rust’s ownership model ensures that you don’t run into issues like dangling pointers or data races, making it a safe choice for multi-threaded environments.
-Concurrency: Rust provides concurrency with thread safety, making it efficient for applications where performance and safety are paramount.
-Async Programming: Rust’s async capabilities (via async and await) are used in conjunction with SQLx to handle database connections efficiently.
-SQLx Overview
-SQLx is a Rust library that provides compile-time checked queries and is asynchronous by nature. Here's why SQLx is a great choice for database interactions:
+5. Start the server
 
-Compile-time Safety: SQLx validates your SQL queries at compile time, preventing runtime errors related to SQL.
-Async: It's built with async/await in mind, ensuring non-blocking database operations, which is crucial for performance in web applications.
-Support for Multiple Databases: SQLx supports various databases including PostgreSQL, MySQL, and SQLite. In this project, we use PostgreSQL.
-License
-This project is licensed under the MIT License. If you modify the code, please ensure you provide proper attribution by linking back to the original repository.
+    ```
+    cargo run
+    ```
+
+## API Endpoints
+
+- **POST /api/auth/register**: Register a new user.
+- **POST /api/auth/login**: Login a user and return a JWT token.
+- **GET /api/users/me**: Retrieve the authenticated user's information.
+- **PUT /api/users/name**: Update the authenticated user's name.
+- **PUT /api/users/password**: Change the authenticated user's password.
+- **GET /api/users/search-emails**: Search for users by their email addresses.
+- **POST /api/file/upload**: Upload a file (requires authentication).
+- **GET /api/file/retrieve**: Retrieve an uploaded file by ID (requires authentication).
+- **POST /api/list/send**: Send a list of files to another user.
+- **GET /api/list/receive**: Retrieve the list of files received from another user.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more details.
+
+## Donations
+
+If you find this project useful and would like to support its continued development, you can make a donation via [Buy Me a Coffee](https://buymeacoffee.com/vipandev).
+
+Thank you for your support!
